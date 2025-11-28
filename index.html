@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="blau.css">
+
+  <title>Test server von Fabio Ciolli</title>
+</head> 
+
+<body bgcolor="2f3136">
+<div style="text-align: center;">
+  <h1> Test server von Fabio Ciolli</h1>
+<input id="input" placeholder="Text eingeben">
+<button onclick="save()">Speichern</button>
+
+<script>
+async function save() {
+  const text = document.getElementById("input").value;
+  await fetch("/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text })
+  });
+  alert("Gespeichert!");
+}
+</script>
+<script>
+<input id="input" placeholder="Text eingeben">
+<button onclick="save()">Speichern</button>
+
+<script>
+async function save() {
+  const text = document.getElementById("input").value;
+  await fetch("/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text })
+  });
+  alert("Gespeichert!");
+}
+</script>
+
+
+</body>
+</html>
+
