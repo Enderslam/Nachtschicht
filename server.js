@@ -1,13 +1,9 @@
-const express = require("express");
+const express = require('express');
+const path = require('path');
 const app = express();
 
+// Dieser Befehl macht den "public"-Ordner für die Website zugänglich
+app.use(express.static(path.join(__dirname, 'public')));
+
 const PORT = process.env.PORT || 3000;
-
-// Test route for Render
-app.get("/", (req, res) => {
-    res.send("Nachtschicht Server läuft erfolgreich über Render! 🚀");
-});
-
-app.listen(PORT, () => {
-    console.log("Server gestartet auf Port: " + PORT);
-});
+app.listen(PORT, () => console.log("Server läuft erfolgreich!"));
