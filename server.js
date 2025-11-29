@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
-const multer  = require('multer'); // Multer importieren
+const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Upload-Ordner erstellen (Dateien landen hier)
+// Upload-Ordner für Dateien
 const upload = multer({ dest: 'uploads/' });
 
 // Statische Dateien ausliefern
@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 // Upload-Route
 app.post('/upload', upload.single('meinedatei'), (req, res) => {
-  console.log(req.file); // Infos zur hochgeladenen Datei
+  console.log(req.file); // Infos über hochgeladene Datei
   res.send('Datei erfolgreich hochgeladen!');
 });
 
