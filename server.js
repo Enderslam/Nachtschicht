@@ -1,18 +1,13 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
-
 const app = express();
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+const PORT = process.env.PORT || 3000;
 
-app.post("/save", (req, res) => {
-    fs.writeFile("data.txt", req.body.text, () => {
-        res.json({ status: "OK" });
-    });
+// Test route for Render
+app.get("/", (req, res) => {
+    res.send("Nachtschicht Server läuft erfolgreich über Render! 🚀");
 });
 
-app.listen(3000, () => {
-    console.log("Server läuft auf Port 3000");
+app.listen(PORT, () => {
+    console.log("Server gestartet auf Port: " + PORT);
 });
