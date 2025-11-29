@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { google } = require('googleapis');
 const path = require('path');
+const { Readable } = require('stream');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,9 +34,12 @@ app.post('/upload', upload.single('meinedatei'), async (req, res) => {
 
     const drive = google.drive({ version: 'v3', auth });
 
-    // Datei hochladen
+    // Datei hochladen (Buffer → Stream)
     const fileMetadata = { name: req.file.originalname };
-    const media = { mimeType: req.file.mimetype, body: Buffer.from(req.file.buffer) };
+    const media = {
+      mimeType: req.file.mimetype,
+      body: Readable.from(req.file.buffer)
+    };
 
     const file = await drive.files.create({
       resource: fileMetadata,
