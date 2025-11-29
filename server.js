@@ -20,6 +20,11 @@ app.get('/', (req, res) => {
 // Upload-Route: Datei geht direkt auf Google Drive
 app.post('/upload', upload.single('meinedatei'), async (req, res) => {
   try {
+    // Prüfen, ob die Environment Variable gesetzt ist
+    if (!process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+      throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON ist nicht gesetzt!');
+    }
+
     // Google Drive Auth über Environment Variable
     const auth = new google.auth.GoogleAuth({
       credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
@@ -28,6 +33,7 @@ app.post('/upload', upload.single('meinedatei'), async (req, res) => {
 
     const drive = google.drive({ version: 'v3', auth });
 
+    // Datei hochladen
     const fileMetadata = { name: req.file.originalname };
     const media = { mimeType: req.file.mimetype, body: Buffer.from(req.file.buffer) };
 
@@ -37,10 +43,15 @@ app.post('/upload', upload.single('meinedatei'), async (req, res) => {
       fields: 'id, webViewLink'
     });
 
-    res.send(`Datei hochgeladen! <a href="${file.data.webViewLink}" target="_blank">Hier downloaden</a>`);
+    // Erfolgreich → Link zurückgeben
+    res.send(`
+      Datei hochgeladen! <br>
+      <a href="${file.data.webViewLink}" target="_blank">Hier downloaden</a>
+    `);
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Fehler beim Hochladen auf Google Drive');
+    // Fehler ausgeben, damit man sieht, was genau schiefgeht
+    console.error('UPLOAD ERROR:', err);
+    res.status(500).send(`Fehler beim Hochladen auf Google Drive: <pre>${err.message}</pre>`);
   }
 });
 
